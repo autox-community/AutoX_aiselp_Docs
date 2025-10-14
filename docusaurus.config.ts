@@ -71,8 +71,13 @@ const config: Config = {
         },
         {
           type: 'doc',
+          docId: 'plugins',
+          label: '插件',
+        },
+        {
+          type: 'doc',
           docId: 'external_support',
-          label: '从外部运行 Autox 脚本',
+          label: '从外部运行脚本',
         },
         {
           type: 'docSidebar',

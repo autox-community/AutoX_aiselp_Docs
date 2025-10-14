@@ -36,4 +36,49 @@ canvas.drawRect(0, 0, 100, 100, paint);
 
 ## canvas.drawARGB(a, r, g, b)
 
-## canvas.draw
+绘制 argb 颜色到画布，每个参数为`0~255`的整数，例如
+
+```js
+canvas.drawARGB(255, 255, 0, 0);
+```
+
+## 在 ui 中使用画布
+
+我们可以使用如下代码来创建一个带有 canvas 的界面
+
+```js
+"ui";
+ui.layout(
+  <frame>
+    <canvas id="board" w="*" h="*" />
+  </frame>
+);
+ui.board.on("draw", function (canvas) {
+  canvas.drawARGB(0xff, 0xff, 0xff, 0xff);
+});
+```
+
+然后在`draw`事件中可以进行绘制图像  
+需要注意的是`ui.board`并不是`canvas`，而是一个`TextureView`,由于历史设计此名称为 canvas 很容易造成混浊，在 v7.1.7 版本后可使用别名`texture`,为兼容性考虑`canvas`名称任然保留。  
+**`draw`事件会在 ui 创建后会有后台线程频繁触发以更新 canvas**，请勿在该含回调函数中做任何与绘制 canvas 无关的事，**在 v7.1.6 版本取消了这一行为**，`draw`事件默认仅会触发一次，如果需要更新`canvas`则使用`ui.board.updateCanvas()`来手动触发`draw`事件，如果需要回到以前的行为只需添加以下代码
+
+```js
+"ui";
+ui.layout(
+  <frame>
+    <canvas id="board" w="*" h="*" />
+  </frame>
+);
+ui.board.on("draw", function (canvas) {
+  canvas.drawARGB(0xff, 0xff, 0xff, 0xff);
+});
+
+threads.start(() => {
+  let board = ui.board;
+  setInterval(() => {
+    board.updateCanvas();
+  }, 1000 / 60);
+});
+```
+
+在 'app 示例/画布' 中可查看更多例子
