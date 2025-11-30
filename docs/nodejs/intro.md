@@ -9,23 +9,34 @@ sidebar_position: 1
 
 ## 启用 nodejs 引擎
 
-默认情况下 js 文件由第一代引擎(Rhino)运行，当文件名由 mjs,cjs,node.js 结尾时使用 nodejs 引擎运行，以 mjs 结尾还会启用 esm 模块特性，这是推荐的运行方式
+默认情况下 js 文件由第一代引擎(Rhino)运行，当文件名由 `mjs`,`cjs`,`node.js` 结尾时使用 nodejs 引擎运行，以 mjs 结尾还会启用 esm 模块特性，这是推荐的运行方式
 
 ## 从全局变量改为导入模块
 
-在第 2 代 api，所有模块全部需要使用`import `关键字导入，如
-`import { showToast } from 'toast'`,暂不支持`require()`和`import()`动态导入
+在第 2 代 api，所有模块全部需要使用`import `关键字导入，暂不支持`require()`和`import()`动态导入
 
+例如
 ```js
 import { showToast } from "toast";
 ```
 
 ## 多线程与异步
 
-在 nodejs 引擎将不再支持多线程，取而代之的是`Promise`和异步函数，第二代 api 大多数都将以返回`Promise`表示异步操作，对于来自 java 的阻塞调用（如 io 读写）可通过`java`模块中的相关函数转换成一个`Promise`而不阻塞 nodejs 线程。
+在 nodejs 引擎将不再支持多线程，取而代之的是`Promise`和异步函数，第二代 大多数 api 都尽可能返回`Promise`表示异步操作，对于来自 java 的阻塞调用（如 io 读写）可通过`java`模块中的相关函数转换成一个`Promise`而不阻塞 nodejs 线程。
 :::warning
-如果你强行使用`java.lang.Thread`类运行 js 代码将会使引擎崩溃
+nodejs使用一个线程锁来确保代码不被并发运行，
+这意味着如果在其他线程(如`java.lang.Thread`类)运行 js 代码将被阻塞直到获取线程锁，js代码的执行顺序始终是同步的。
 :::
+
+## java 交互性
+
+nodejs引擎同样提供了与java交互的功能，这些功能都封装在 `java` 模块中，使用方式与Rhino类似，但有些不同 
+
+该功能目前是基于javet的[代理转换器](https://www.caoccao.com/Javet/reference/converters/proxy_converter.html#)实现，
+可阅读javet相关文档获取更详细的信息。  
+
+在nodejs引擎，js代码的执行速度远快于第一代Rhino引擎，但这并不代表调用java的速度要更好，
+java的运行速度不会因为引擎变更而变快，而且由于存在额外的jni调用以及数据转换，频繁调用java方法的速度比 Rhino 要慢一些
 
 ........待补充
 
