@@ -47,6 +47,46 @@ thread.interrupt();
 
 更多信息参见[Thread](#thread)。
 
+## threads.runOnMainThread(fn)
+
+> 7.2.0 新增
+
+```ts
+function runOnMainThread(fn: () => void): void;
+```
+
+使 fn 函数在脚本主线程中运行
+
+## threads.runOnThreadPool(fn)
+
+> 7.2.0 新增
+
+```ts
+function runOnThreadPool(fn: () => void): void;
+```
+
+使 fn 函数在默认线程池中运行
+
+## threads.runOnIoThreadPool(fn)
+
+> 7.2.0 新增
+
+```ts
+function runOnIoThreadPool(fn: () => void): void;
+```
+
+使 fn 函数在默认 Io 线程池中运行
+
+## threads.runAsync(fn)
+
+> 7.2.0 新增
+
+```ts
+function runAsync<T>(fn: () => T): Promise<T>;
+```
+
+使 fn 函数在默认线程池中运行,并且将结果封装为`Promise`
+
 ## threads.shutDownAll()
 
 停止所有通过`threads.start()`启动的子线程。

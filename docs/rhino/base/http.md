@@ -193,6 +193,16 @@ log(res.body.string());
 
 该函数是 get, post, postJson 等函数的基础函数。因此除非是 PUT, DELET 等请求，或者需要更高定制的 HTTP 请求，否则直接使用 get, post, postJson 等函数会更加方便。
 
+## http.setTimeout(timeout)
+
+> 7.2.0 新增
+
+```ts
+function _setTimeout(timeout: number): void;
+```
+
+设置 http 模块的请求超时时间，单位为毫秒，默认值为 30 秒
+
 # Response
 
 HTTP 请求的响应。
